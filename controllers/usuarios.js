@@ -1,8 +1,12 @@
-const { response } = require('express');
+const { response, request } = require('express');
 
-const usuariosGet = (req, res = response) => {
+const usuariosGet = (req = request, res = response) => {
+  const { page = 1, limit = 10} = req.query;
+
   res.json({
-    msg: 'HTTP GET API controller'
+    msg: 'HTTP GET API controller',
+    page,
+    limit
   });
 };
 
@@ -17,8 +21,11 @@ const usuariosPost = (req, res = response) => {
 };
 
 const usuariosPut = (req, res) => {
+  const id = +req.params.id;
+
   res.json({
-    msg: 'HTTP PUT API controller'
+    msg: 'HTTP PUT API controller',
+    id
   });
 };
 
