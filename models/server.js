@@ -26,17 +26,17 @@ class Server {
       });
     });
 
-    // HTTP PUT
-    this.app.put('/api', (req, res) => {
-      res.json({
-        msg: 'HTTP PUT API call'
+    // HTTP POST
+    this.app.post('/api', (req, res) => {
+      res.status(201).json({
+        msg: 'HTTP POST API call'
       });
     });
 
-    // HTTP POST
-    this.app.post('/api', (req, res) => {
-      res.json({
-        msg: 'HTTP POST API call'
+    // HTTP PUT
+    this.app.put('/api', (req, res) => {
+      res.status(500).json({
+        msg: 'HTTP PUT API call'
       });
     });
 
