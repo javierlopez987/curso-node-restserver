@@ -2,8 +2,8 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-const { validarCampos }  = require('../middlewares/validar-campos');
-const { isRoleValid, isEmailUnique } = require('../helpers/db-validators');
+const { errorHandler }  = require('../middlewares/validar-campos');
+const { isRoleValid, isEmailUnique, existeUsuarioPorId } = require('../helpers/db-validators');
 const { usuariosGet, usuariosPost, usuariosPut, usuariosDelete } = require('../controllers/usuarios');
 
 const router = Router();
@@ -17,13 +17,17 @@ router.post('/', [
   check('password', 'El password debe contener más de 6 letras').isLength({ min: 6 }),
   check('email', 'El email no es válido').isEmail(),
   check('email').custom(isEmailUnique),
-  // check('role', 'No es un rol válido').isIn(['ADMIN_ROLE', 'USER_ROLE']),
   check('role').custom(isRoleValid),
-  validarCampos
+  errorHandler
 ], usuariosPost);
 
 // HTTP PUT
-router.put('/:id', usuariosPut);
+router.put('/:id', [
+  check('id', 'No es un ID válido').isMongoId(),
+  check('id').custom(existeUsuarioPorId),
+  check('role').custom(isRoleValid),
+  errorHandler
+], usuariosPut);
 
 // HTTP DELETE
 router.delete('/', usuariosDelete);
