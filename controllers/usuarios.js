@@ -4,13 +4,20 @@ const bcrypt = require('bcryptjs');
 const Usuario = require('../models/usuario');
 
 // GET
-const usuariosGet = (req = request, res = response) => {
-  const { page = 1, limit = 10} = req.query;
+const usuariosGet = async (req = request, res = response) => {
+  const { limit = 10, offset = 0} = req.query;
+  const query = { estado: true };
+
+  const [total, usuarios] = await Promise.all([
+    Usuario.countDocuments(query),
+    Usuario.find(query)
+      .skip(+offset)
+      .limit(+limit)
+  ]);
 
   res.json({
-    msg: 'HTTP GET API controller',
-    page,
-    limit
+    total,
+    usuarios
   });
 };
 
@@ -29,7 +36,6 @@ const usuariosPost = async (req, res = response) => {
   await usuario.save();
 
   res.status(201).json({
-    msg: 'HTTP POST API controller',
     usuario
   });
 };
@@ -49,10 +55,7 @@ const usuariosPut = async (req, res) => {
   
   const usuario = await Usuario.findByIdAndUpdate(id, body);
   
-  res.json({
-    msg: 'HTTP PUT API controller',
-    usuario
-  });
+  res.json(usuario);
 };
 
 // DELETE
