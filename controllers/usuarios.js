@@ -1,5 +1,8 @@
 const { response, request } = require('express');
 
+const Usuario = require('../models/usuario');
+
+// GET
 const usuariosGet = (req = request, res = response) => {
   const { page = 1, limit = 10} = req.query;
 
@@ -10,16 +13,20 @@ const usuariosGet = (req = request, res = response) => {
   });
 };
 
-const usuariosPost = (req, res = response) => {
-  const { nombre, edad } = req.body;
+// POST
+const usuariosPost = async (req, res = response) => {
+  const { nombre, email, password, role } = req.body;
+  const usuario = new Usuario({ nombre, email, password, role });
+
+  await usuario.save();
 
   res.status(201).json({
     msg: 'HTTP POST API controller',
-    nombre,
-    edad
+    usuario
   });
 };
 
+// PUT
 const usuariosPut = (req, res) => {
   const id = +req.params.id;
 
@@ -29,6 +36,7 @@ const usuariosPut = (req, res) => {
   });
 };
 
+// DELETE
 const usuariosDelete = (req, res) => {
   res.json({
     msg: 'HTTP DELETE API controller'
