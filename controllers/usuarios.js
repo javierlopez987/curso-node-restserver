@@ -59,10 +59,17 @@ const usuariosPut = async (req, res) => {
 };
 
 // DELETE
-const usuariosDelete = (req, res) => {
-  res.json({
-    msg: 'HTTP DELETE API controller'
-  });
+const usuariosDelete = async (req, res) => {
+
+  const { id } = req.params;
+
+  // Borrado físico
+  // const usuario = await Usuario.findByIdAndDelete(id);
+
+  // Borrado lógico
+  const usuario = await Usuario.findByIdAndUpdate(id, { estado: false});
+
+  res.json(usuario);
 };
 
 module.exports = {
