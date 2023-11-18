@@ -1,7 +1,8 @@
-const { response, request } = require('express');
+const { response } = require('express');
 const bcrypt = require('bcryptjs');
 
 const Usuario = require('../models/usuario');
+
 const { generarJWT } = require('../helpers/generar-jwt');
 
 
@@ -42,6 +43,7 @@ const login = async (req, res = response) => {
       token
     });
   } catch (error) {
+    // Error que no ha podido capturarse antes y lleva al catch para no romper la aplicación
     console.log(error);
     res.status(500).json({
       msg: 'ERROR. Comuníquese con el administrador'
